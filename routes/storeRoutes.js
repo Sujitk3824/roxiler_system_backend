@@ -1,15 +1,24 @@
+// routes/storeRoutes.js
 import express from "express";
-import { getStores, rateStore, addStore } from "../controllers/storeController.js";
+import {
+  addStore,
+  getOwnerStores,
+  getStores,
+  rateStore
+} from "../controllers/storeController.js";
 
 const router = express.Router();
 
-// Add new store
+// Add a new store
 router.post("/add-store", addStore);
 
-// Get all stores
-router.get("/all", getStores);
+// Get all stores for a specific owner
+router.get("/owner/:ownerId", getOwnerStores);
 
-// Rate a store
+// GET all stores
+router.get("/", getStores);
+
+// POST/UPDATE rating
 router.post("/:storeId/rate", rateStore);
 
 export default router;

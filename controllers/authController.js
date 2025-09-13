@@ -108,7 +108,7 @@ export const updatePassword = async (req, res) => {
 
     if (!email || !oldPassword || !newPassword) {
       return res.status(400).json({ message: "Email and passwords are required" });
-    }
+    } 
 
     // 1️⃣ Fetch user from DB
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
