@@ -2,7 +2,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import storeRoutes from "./routes/storeRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -20,6 +20,9 @@ app.use(express.urlencoded({ extended: true })); // parse URL-encoded body
 app.use("/api/auth", authRoutes);
 app.use("/api/stores", storeRoutes);
 app.use("/api/user", userRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
+
 
 // Health check
 app.get("/", (req, res) => {

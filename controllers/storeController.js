@@ -4,18 +4,33 @@ import pool from "../db.js"; // adjust path if necessary
 // ✅ Add a new store
 export const addStore = async (req, res) => {
   try {
-    const { store_name, address, overall_rating, user_rating } = req.body;
+    const { store_name, address, owner_id } = req.body;
 
+    // validations
     if (!store_name || !address) {
       return res
         .status(400)
         .json({ message: "Store name and address are required" });
     }
 
+    if (!owner_id) {
+      return res.status(400).json({ message: "Owner ID is required" });
+    }
+
+    // check if user exists and is store owner
+    const ownerCheck = await pool.query(
+      `SELECT id FROM users WHERE id = $1 AND role = 'store owner'`,
+      [owner_id]
+    );
+    if (ownerCheck.rows.length === 0) {
+      return res.status(404).json({ message: "Store owner not found" });
+    }
+
+    // insert store
     const result = await pool.query(
-      `INSERT INTO stores (store_name, address, overall_rating, user_rating) 
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [store_name, address, overall_rating || 0, user_rating || 0]
+      `INSERT INTO stores (store_name, address, overall_rating, user_rating, owner_id) 
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [store_name, address, 0, 0, owner_id]
     );
 
     res.status(201).json({
@@ -141,3 +156,5 @@ export const getOwnerStores = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
