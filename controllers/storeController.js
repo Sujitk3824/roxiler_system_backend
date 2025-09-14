@@ -158,3 +158,23 @@ export const getOwnerStores = async (req, res) => {
 };
 
 
+export const getStoreList = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT 
+         s.id,
+         s.store_name AS name,
+         u.email,
+         s.address,
+         s.overall_rating AS rating
+       FROM stores s
+       LEFT JOIN users u ON s.owner_id = u.id
+       ORDER BY s.id ASC`
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching store list:", error.message);
+    res.status(500).json({ message: "Error fetching store list", error: error.message });
+  }
+};
+

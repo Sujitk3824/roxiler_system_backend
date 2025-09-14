@@ -4,7 +4,9 @@ import {
   addStore,
   getOwnerStores,
   getStores,
-  rateStore
+  rateStore,
+  getStoreList
+  
 } from "../controllers/storeController.js";
 
 const router = express.Router();
@@ -17,6 +19,10 @@ router.get("/owner/:ownerId", getOwnerStores);
 
 // GET all stores
 router.get("/", getStores);
+
+router.get("/list", getStoreList);
+
+
 
 // POST/UPDATE rating
 router.post("/:storeId/rate", rateStore);

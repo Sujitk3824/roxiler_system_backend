@@ -66,3 +66,33 @@ export const getUsers = async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 };  
+
+
+
+export const getUserDetails = async (req, res) => {
+  try {
+    const users = await User.find({}, {
+      _id: 1,
+      name: 1,
+      email: 1,
+      address: 1,
+      role: 1,
+      rating: 1
+    });
+
+    // Optional: Rename _id to id for frontend consistency
+    const formattedUsers = users.map(user => ({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      address: user.address,
+      role: user.role,
+      rating: user.rating
+    }));
+
+    res.status(200).json(formattedUsers);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Server error while fetching users' });
+  }
+};
