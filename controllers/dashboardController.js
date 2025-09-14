@@ -1,6 +1,6 @@
 import pool from "../db.js";
 
-// ✅ Get summary stats
+//  Get summary stats
 export const getDashboardStats = async (req, res) => {
   try {
     const usersResult = await pool.query("SELECT COUNT(*) FROM users");

@@ -8,7 +8,7 @@ export const signup = async (req, res) => {
   try {
     const { name, address, email, password } = req.body;
 
-    // ✅ Validation
+    // Validation
     if (!name || name.length < 20 || name.length > 60) {
       return res.status(400).json({ message: "Name must be 20–60 characters." });
     }
@@ -33,7 +33,7 @@ export const signup = async (req, res) => {
       });
     }
 
-    // ✅ Check if user already exists
+    // Check if user already exists
     const existing = await pool.query(
       "SELECT * FROM users WHERE email = $1",
       [email]
@@ -42,10 +42,10 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Email already registered." });
     }
 
-    // ✅ Hash password
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // ✅ Insert as Normal User only
+    // Insert as Normal User only
     const result = await pool.query(
       `INSERT INTO users (name, address, email, password, role)
        VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, role`,
@@ -110,19 +110,19 @@ export const updatePassword = async (req, res) => {
       return res.status(400).json({ message: "Email and passwords are required" });
     } 
 
-    // 1️⃣ Fetch user from DB
+    // 1️Fetch user from DB
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
     const user = result.rows[0];
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // 2️⃣ Compare old password
+    // Compare old password
     const match = await bcrypt.compare(oldPassword, user.password);
     if (!match) return res.status(400).json({ message: "Old password is incorrect" });
 
-    // 3️⃣ Hash new password
+    // Hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // 4️⃣ Update DB
+    //  Update DB
     await pool.query("UPDATE users SET password = $1 WHERE email = $2", [hashedPassword, email]);
 
     res.json({ message: "Password updated successfully" });

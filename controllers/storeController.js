@@ -1,7 +1,7 @@
-// At the very top of storeRoutes.js
+
 import pool from "../db.js"; // adjust path if necessary
 
-// ✅ Add a new store
+//Add a new store
 export const addStore = async (req, res) => {
   try {
     const { store_name, address, owner_id } = req.body;
@@ -44,7 +44,7 @@ export const addStore = async (req, res) => {
 };
 
 
-// ✅ Get all stores with overall rating
+// Get all stores with overall rating
 export const getStores = async (req, res) => {
   try {
     const result = await pool.query(`
@@ -63,7 +63,7 @@ export const getStores = async (req, res) => {
   }
 };
 
-// ✅ Rate a store (used in StoreCard.js)
+// Rate a store (used in StoreCard.js)
 export const rateStore = async (req, res) => {
   const { storeId } = req.params;
   const { userId, rating } = req.body;
